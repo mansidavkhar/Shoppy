@@ -71,6 +71,9 @@
     background: rgb(224, 222, 222);
 }
 
+.nav-login-cart img{
+    cursor: pointer;
+}
 .nav-cart-count{
     height: 22px;
     width: 22px;
