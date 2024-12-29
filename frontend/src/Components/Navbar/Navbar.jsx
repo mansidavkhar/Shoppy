@@ -11,13 +11,7 @@ const Navbar = () => {
             <p>ShopSphere</p>
         </div>
 
-        <ul className="nav-menu">
-            <li>Shop <hr /></li>
-            <li>Men</li>
-            <li>Women</li>
-            <li>Kids</li>
-            <li>Wishlist</li>
-        </ul>
+       
 
         <div className="nav-login-cart">
             <button>login</button>
