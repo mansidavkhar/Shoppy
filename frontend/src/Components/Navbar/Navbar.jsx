@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './Navbar.css'
-import logo from '../Assets/logo.png'
+import mylogo from '../Assets/my_logo.png'
 import cart_icon from '../Assets/cart_icon.png'
 
 const Navbar = () => {
@@ -10,8 +10,8 @@ const Navbar = () => {
   return (
     <div className='navbar'>
         <div className="nav-logo">
-            <img src={logo} alt="" />
-            <p>ShopSphere</p>
+            <img src={mylogo} alt="" />
+            
         </div>
 
         <ul className="nav-menu">
