@@ -5,10 +5,18 @@
     box-shadow: 0 1px 3px -2px black;
 }
 
-.nav-logo{
+.nav-logo {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    height: auto;
 }
+
+.nav-logo img {
+    height: 110px;
+    width: auto; 
+}
+
 
 .nav-logo p{
     color: #000000;
