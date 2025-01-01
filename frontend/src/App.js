@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Navbar from './Components/Navbar/Navbar';
-import FormComponent from './Components/Form/Form'; // Update the path to your Form.jsx file if needed
+import Footer from './Components/Footer/Footer';
 
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import ShopCategory from './Pages/ShopCategory';
@@ -28,6 +28,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/login" element={<LoginSignup />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </div>
   );
