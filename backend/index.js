@@ -11,7 +11,7 @@ const cors = require("cors");
 app.use(express.json());
 app.use(cors());
 
-
+//db
 mongoose.connect(process.env.MONGODB_URI);
 
 
