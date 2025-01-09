@@ -1,4 +1,4 @@
-const port = 4000;
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -11,7 +11,18 @@ app.use(express.json());
 app.use(cors());
 
 
-mongoose.connect("mongodb+srv://manishbraje:manishraje@cluster0.nuu5t.mongodb.net/shoppy");
+//setting up .env file
+require('dotenv').config();
+const port = process.env.PORT || 4000;
+
+// Update MongoDB connection
+mongoose.connect(process.env.MONGODB_URI);
+
+// Update JWT secret
+const token = jwt.sign(data, process.env.JWT_SECRET);
+
+
+
 
 
 app.get("/", (req, res) => {
