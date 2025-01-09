@@ -155,33 +155,52 @@ app.get('/allproducts', async (req, res) => {
 
 
 
+ 
+// Add product to cart
+app.post('/addtocart', fetchUser, async (req, res) => {
+    console.log("Added", req.body.itemId);
 
-//adding products in cart
-app.post('/addtocart',fetchUser,async(req,res)=>{
-    console.log("added",req.body.itemId)
-    let userData=await Users.findOne({_id:req.user.id});
-    userData.cartData[req.body.itemId]+=1;
-    await Users.findOneAndUpdate({_id:req.user.id},{cartData:userData.cartData});
-    res.send("Added");
-})
+    let userData = await Users.findOne({ _id: req.user.id });
+    
+    // If the product is already in the cart, increment its quantity, else add it with quantity 1
+    if (userData.cartData[req.body.itemId]) {
+        userData.cartData[req.body.itemId] += 1;
+    } else {
+        userData.cartData[req.body.itemId] = 1;
+    }
 
-//remove product from cart
-app.post('/removefromcart',fetchUser,async(req,res)=>{
-    console.log("removed",req.body.itemId)
-    let userData=await Users.findOne({_id:req.user.id});
-    if(userData.cartData[req.body.itemId]>0)
-    userData.cartData[req.body.itemId]-=1;
-    await Users.findOneAndUpdate({_id:req.user.id},{cartData:userData.cartData});
-    res.send("Removed");
-})
+    await Users.findOneAndUpdate({ _id: req.user.id }, { cartData: userData.cartData });
+    res.send("Added to cart");
+});
+
+// Remove product from cart
+app.post('/removefromcart', fetchUser, async (req, res) => {
+    console.log("Removed", req.body.itemId);
+
+    let userData = await Users.findOne({ _id: req.user.id });
+
+    // If the product exists in the cart, decrement the quantity or remove it if the quantity is 0
+    if (userData.cartData[req.body.itemId] > 0) {
+        userData.cartData[req.body.itemId] -= 1;
+        if (userData.cartData[req.body.itemId] === 0) {
+            delete userData.cartData[req.body.itemId]; // Remove the product from the cart if quantity is 0
+        }
+    }
+
+    await Users.findOneAndUpdate({ _id: req.user.id }, { cartData: userData.cartData });
+    res.send("Removed from cart");
+});
+
 
 
 //cart data
-app.post('/getcart',fetchUser,async(req,res)=>{
+// Get cart data
+app.post('/getcart', fetchUser, async (req, res) => {
     console.log("GetCart");
-    let userData = await Users.findOne({_id:req.user.id});
-    res.json(userData.cartData);
-})
+    let userData = await Users.findOne({ _id: req.user.id });
+    res.json(userData.cartData); // Send the cart data
+});
+
 
 //user
 const Users = mongoose.model('Users', {
@@ -196,41 +215,39 @@ const Users = mongoose.model('Users', {
         type: String
     },
     cartData: {
-        type: Object
+        type: Object, // This will hold the product IDs and quantities
+        default: {}
     },
     date: {
         type: Date,
         default: Date.now,
     }
-})
+});
 
 
 app.post('/signup', async (req, res) => {
     let check = await Users.findOne({ email: req.body.email });
     if (check) {
-        return res.status(400).json({ success: false, errors: "Exisiting user found with same email" })
+        return res.status(400).json({ success: false, errors: "Existing user found with the same email" })
     }
 
-    let cart = {};
-    for (let i = 0; i < 300; i++) {
-        cart[i] = 0;
-    }
     const user = new Users({
         name: req.body.username,
         email: req.body.email,
         password: req.body.password,
-        cartData: cart,
-    })
+        cartData: {}, // Start with an empty cart
+    });
 
     await user.save();
     const data = {
         user: {
             id: user.id
         }
-    }
+    };
     const token = jwt.sign(data, 'secret_ecom');
     res.json({ success: true, token });
-})
+});
+
 
 
 app.post('/login',async(req,res)=>{
